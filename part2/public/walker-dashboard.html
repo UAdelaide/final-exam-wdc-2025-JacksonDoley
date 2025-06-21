@@ -62,7 +62,7 @@
         async function applyToWalk(requestId) {
           try {
             const walkerId = await getCurrentUser(); // Fetch the current user's ID
-            if 
+            if (!walkerId) throw new Error('Unable to r')
             const res = await fetch(`/api/walks/${requestId}/apply`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
