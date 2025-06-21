@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dog Walking Service</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body class="bg-light">
+
+  <div id="app" class="container py-5">
+    <h1 class="mb-4 text-primary">{{ message }}</h1>
+    <p class="lead">Connect with trusted walkers for your beloved dog!</p>
+
+    <!-- Login form -->
+    <form @submit.prevent="login" class="mb-4">
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <!-- Bind the email input to the Vue 'email' variable -->
+        <input v-model="email" type="email" id="email" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <!-- Bind the password input to the Vue 'password' variable -->
+        <input v-model="password" type="password" id="password" class="form-control" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+
+    <!-- Display error message if login fails -->
+    <div v-if="error" class="alert alert-danger">{{ error }}</div>
+  </div>
+
+  <script>
+    const { createApp, ref } = Vue;
+
+    createApp({
+      setup() {
+        // Define reactive variables for email, password, and error message
+        const email = ref('');
+        const password = ref('');
+        const error = ref('');
+
+        // Login function to handle form submission
+        async function login() {
+          try {
+            // Send a POST request to the login API endpoint
+            const res = await fetch('/api/users/login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email: email.value, password: password.value })
+            });
+
+            const result = await res.json();
+
+            // Handle unsuccessful login
+            if (!res.ok) throw new Error(result.error || 'Login failed');
+
+            // Redirect based on user role
+            if (result.user.role === 'owner') {
+              window.location.href = 'owner-dashboard.html';
+            } else if (result.user.role === 'walker') {
+              window.location.href = 'walker-dashboard.html';
+            }
+          } catch (err) {
+            // Display error message if login fails
+            error.value = err.message;
+          }
+        }
+
+        return {
+          email,
+          password,
+          error,
+          login
+        };
+      }
+    }).mount('#app');
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
