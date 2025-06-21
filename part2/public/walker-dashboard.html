@@ -94,7 +94,9 @@
             if (!res.ok) throw new Error('Failed to fetch current');
             const user = await res.json();
             return user.user_id; // Return the user ID
-            
+          } catch (err) {
+            console.error('')
+          }
           }
         }
 
