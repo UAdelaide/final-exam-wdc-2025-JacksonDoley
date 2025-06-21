@@ -63,11 +63,11 @@
           try {
             const walkerId = await getCurrentUser(); // Fetch the current user's ID
             if (!walkerId) throw new Error('Unable to retrieve walker ID');
-            
+
             const res = await fetch(`/api/walks/${requestId}/apply`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ walker_id: user })
+              body: JSON.stringify({ walker_id: walkerId }) // Use the fetched walker ID
             });
             const result = await res.json();
 
