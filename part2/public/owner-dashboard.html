@@ -93,7 +93,7 @@
         async function loadDogs() {
           try {
             const res = await fetch('/api/users/dogs');
-            if
+            if (!res.ok) throw new Error
           }
         }
 
