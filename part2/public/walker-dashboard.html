@@ -95,7 +95,7 @@
             const user = await res.json();
             return user.user_id; // Return the user ID
           } catch (err) {
-            console.error('')
+            console.error('Error fetching current user:', err);
           }
           }
         }
