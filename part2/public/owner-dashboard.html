@@ -95,7 +95,8 @@
             const res = await fetch('/api/users/dogs');
             if (!res.ok) throw new Error('Failed to load the dogs');
             dogs.value = await res.json(); // This line will populate the dogs variable
-          } catch (err) {}
+          } catch (err) {
+            error.value = err.message;
           }
         }
 
